@@ -4,10 +4,15 @@
 
 class GoalClass{
   late List<GoalClass> SubGoals;
-  late String Descrition;
+  late String Description;
   late DateTime CreationDateTime;
   late DateTime? ChangingDateTime;
   late DateTime? AchieveDateTime;
+
+  ///Return goal's description
+  String getDescription(){
+    return Description;
+  }
 
   ///Update an existing goal with full information about it
   ///No need pass value of DateTime, 'cause it will be calculated automatically
@@ -15,7 +20,7 @@ class GoalClass{
     if(Achieved)
       AchieveDateTime = DateTime.now();
     ChangingDateTime = DateTime.now();
-    this.Descrition = Description;
+    this.Description = Description;
 
     SubGoals.removeWhere((element) => DeletedSubGoals.contains(element));
 
@@ -38,7 +43,7 @@ class GoalClass{
   ///Constructor consume only description value, 'cause no additional information
   ///exist in moment of creation
   GoalClass(String Descrition){
-    this.Descrition = Descrition;
+    this.Description = Descrition;
     CreationDateTime = DateTime.now();
   }
 }
