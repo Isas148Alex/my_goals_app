@@ -11,7 +11,9 @@ class _GoalsPageState extends State<GoalsPage> {
   var Goals = [
     TextButton(
       onPressed: () {},
-      child: Text("Добавить цель"),
+      child: Text("Добавить цель",
+          style: TextStyle(color: Colors.black)
+      ),
     ),
     GoalClass("Test Goals")
   ];
@@ -23,9 +25,9 @@ class _GoalsPageState extends State<GoalsPage> {
         backgroundColor: Colors.amber,
         title: Center(
             child: Text(
-          "Мои цели",
-          style: TextStyle(color: Colors.black),
-        )),
+              "Мои цели",
+              style: TextStyle(color: Colors.black),
+            )),
       ),
       body: Center(
         child: Scaffold(
@@ -35,15 +37,22 @@ class _GoalsPageState extends State<GoalsPage> {
                 final item = Goals[index];
 
                 try {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [(item as TextButton)],
+                  return Material(
+                    child:
+                    InkWell(child: Container(child: (item as TextButton))),
                   );
                 } catch (e) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Text((item as GoalClass).getDescription())],
-                  );
+                  return Material(
+                      child: InkWell(
+                          child: Container(
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                (item as GoalClass).getDescription(),
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          )));
                 }
               }),
         ),
