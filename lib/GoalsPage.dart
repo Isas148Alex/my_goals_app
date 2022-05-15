@@ -54,7 +54,7 @@ class _GoalsPageState extends State<GoalsPage> {
                     child: TextButton(
                       onPressed: () {},
                       child: Text(
-                        (item as GoalClass).getDescription(),
+                        (item as GoalClass).Description,
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
