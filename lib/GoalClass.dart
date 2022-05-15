@@ -5,6 +5,7 @@
 class GoalClass{
   late List<GoalClass> SubGoals;
   late String Description;
+  late String Name;
   late DateTime CreationDateTime;
   late DateTime? ChangingDateTime;
   late DateTime? AchieveDateTime;
@@ -37,8 +38,9 @@ class GoalClass{
 
   ///Constructor consume only description value, 'cause no additional information
   ///exist in moment of creation
-  GoalClass(String Descrition){
+  GoalClass(String Descrition, String Name){
     this.Description = Descrition;
+    this.Name = Name;
     CreationDateTime = DateTime.now();
   }
 }
