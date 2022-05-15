@@ -3,18 +3,22 @@
 ///and an elements of the same type.
 
 class GoalClass{
-  late List<GoalClass> SubGoals;
+  List<GoalClass> SubGoals = [];
   late String Description;
   late String Name;
   late DateTime CreationDateTime;
-  late DateTime? ChangingDateTime;
-  late DateTime? AchieveDateTime;
+  late DateTime ChangingDateTime = DateTime(0);
+  late DateTime AchieveDateTime = DateTime(0);
+  bool Achieved = false;
+  bool Changed = false;
 
   ///Update an existing goal with full information about it
   ///No need pass value of DateTime, 'cause it will be calculated automatically
   void UpdateGoal(String Description, bool Achieved, List<GoalClass> AchievedSubGoals, List<GoalClass> DeletedSubGoals){
-    if(Achieved)
+    if(Achieved){
       AchieveDateTime = DateTime.now();
+      this.Achieved = Achieved;
+    }
     ChangingDateTime = DateTime.now();
     this.Description = Description;
 
@@ -29,18 +33,18 @@ class GoalClass{
   ///Changes achieved state for goal
   ///No need pass value of DateTime, 'cause it will be calculated automatically
   void AchieveGoal(bool Achieved){
-    if(Achieved)
+    if(Achieved){
       AchieveDateTime = DateTime.now();
+      this.Achieved = Achieved;
+    }
     else
-      AchieveDateTime = null;
+      AchieveDateTime = DateTime(0);
     ChangingDateTime = DateTime.now();
   }
 
   ///Constructor consume only description value, 'cause no additional information
   ///exist in moment of creation
-  GoalClass(String Descrition, String Name){
-    this.Description = Descrition;
-    this.Name = Name;
+  GoalClass(this.Description, this.Name){
     CreationDateTime = DateTime.now();
   }
 }
