@@ -12,13 +12,19 @@ class GoalShowPage extends StatefulWidget {
 }
 
 class _GoalShowPageState extends State<GoalShowPage> {
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        widget.goal.Description,
-      ),
+    return Scaffold(
+      appBar: AppBar(
+          centerTitle: true,
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+          backgroundColor: Colors.amber,
+          title: Text(
+            widget.goal.Description,
+            style: TextStyle(color: Colors.black),
+          )),
     );
   }
 }
