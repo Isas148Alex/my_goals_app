@@ -75,8 +75,9 @@ class _GoalsPageState extends State<GoalsPage> {
           return GoalCreatePage();
         }));
     if(result != null){
-      Goals.add(result);
-      this.setState(() { });
+      this.setState(() {
+        Goals.add(result);
+      });
     }
   }
 }
