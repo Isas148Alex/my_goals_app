@@ -10,7 +10,7 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
-  var Goals = [GoalClass("Test Goals"),GoalClass("Test Goals 2")];
+  var Goals = [GoalClass("Test Goal", "G1"), GoalClass("Test Goal 2", "G2")];
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,9 @@ class _GoalsPageState extends State<GoalsPage> {
         backgroundColor: Colors.amber,
         title: Center(
             child: Text(
-          "Мои цели",
-          style: TextStyle(color: Colors.black),
-        )),
+              "Мои цели",
+              style: TextStyle(color: Colors.black),
+            )),
       ),
       body: Center(
         child: Scaffold(
@@ -32,10 +32,7 @@ class _GoalsPageState extends State<GoalsPage> {
               color: Colors.black,
             ),
             onPressed: () {
-              (Navigator.push(context,
-                  MaterialPageRoute<void>(builder: (BuildContext context) {
-                return GoalCreatePage();
-              })));
+              _navigateEnd(context);
             },
           ),
           body: ListView.builder(
@@ -45,19 +42,20 @@ class _GoalsPageState extends State<GoalsPage> {
                 return Material(
                     child: InkWell(
                         child: Container(
-                  child: TextButton(
-                    onPressed: () {
-                      (Navigator.push(context,
-                          MaterialPageRoute<void>(builder: (BuildContext context) {
-                            return GoalShowPage(item);
-                          })));
-                    },
-                    child: Text(
-                      (item as GoalClass).Description,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                )));
+                          child: TextButton(
+                            onPressed: () {
+                              (Navigator.push(context,
+                                  MaterialPageRoute<void>(
+                                      builder: (BuildContext context) {
+                                        return GoalShowPage(item);
+                                      })));
+                            },
+                            child: Text(
+                              (item as GoalClass).Name,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        )));
               }),
         ),
       ),
@@ -70,5 +68,15 @@ class _GoalsPageState extends State<GoalsPage> {
         ),
       ),
     );
+  }
+  void _navigateEnd(BuildContext context) async {
+    final result = await Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return GoalCreatePage();
+        }));
+    if(result != null){
+      Goals.add(result);
+      this.setState(() { });
+    }
   }
 }

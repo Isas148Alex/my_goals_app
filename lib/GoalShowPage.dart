@@ -22,7 +22,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           backgroundColor: Colors.amber,
           title: Text(
-            widget.goal.Description,
+            widget.goal.Name,
             style: TextStyle(color: Colors.black),
           )),
     );
