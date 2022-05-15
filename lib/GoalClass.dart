@@ -9,11 +9,6 @@ class GoalClass{
   late DateTime? ChangingDateTime;
   late DateTime? AchieveDateTime;
 
-  ///Return goal's description
-  String getDescription(){
-    return Description;
-  }
-
   ///Update an existing goal with full information about it
   ///No need pass value of DateTime, 'cause it will be calculated automatically
   void UpdateGoal(String Description, bool Achieved, List<GoalClass> AchievedSubGoals, List<GoalClass> DeletedSubGoals){
