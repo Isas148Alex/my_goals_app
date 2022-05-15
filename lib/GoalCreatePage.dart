@@ -12,6 +12,9 @@ class _GoalCreatePageState extends State<GoalCreatePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
         backgroundColor: Colors.amber,
         title: Center(
             child: Text(
