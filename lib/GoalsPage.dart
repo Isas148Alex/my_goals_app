@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'GoalClass.dart';
+import 'GoalCreatePage.dart';
 
 class GoalsPage extends StatefulWidget {
   @override
@@ -8,15 +9,7 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
-  var Goals = [
-    TextButton(
-      onPressed: () {},
-      child: Text("Добавить цель",
-          style: TextStyle(color: Colors.black)
-      ),
-    ),
-    GoalClass("Test Goals")
-  ];
+  var Goals = [GoalClass("Test Goals")];
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +18,20 @@ class _GoalsPageState extends State<GoalsPage> {
         backgroundColor: Colors.amber,
         title: Center(
             child: Text(
-              "Мои цели",
-              style: TextStyle(color: Colors.black),
-            )),
+          "Мои цели",
+          style: TextStyle(color: Colors.black),
+        )),
       ),
       body: Center(
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              (Navigator.push(context,
+                  MaterialPageRoute<void>(builder: (BuildContext context) {
+                return GoalCreatePage();
+              })));
+            },
+          ),
           body: ListView.builder(
               itemCount: Goals.length,
               itemBuilder: (context, index) {
@@ -39,20 +40,20 @@ class _GoalsPageState extends State<GoalsPage> {
                 try {
                   return Material(
                     child:
-                    InkWell(child: Container(child: (item as TextButton))),
+                        InkWell(child: Container(child: (item as TextButton))),
                   );
                 } catch (e) {
                   return Material(
                       child: InkWell(
                           child: Container(
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                (item as GoalClass).getDescription(),
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          )));
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        (item as GoalClass).getDescription(),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  )));
                 }
               }),
         ),
