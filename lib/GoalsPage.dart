@@ -25,6 +25,11 @@ class _GoalsPageState extends State<GoalsPage> {
       body: Center(
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.amber,
+            child: Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
             onPressed: () {
               (Navigator.push(context,
                   MaterialPageRoute<void>(builder: (BuildContext context) {
