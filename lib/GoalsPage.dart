@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'GoalClass.dart';
 import 'GoalCreatePage.dart';
+import 'GoalShowPage.dart';
 
 class GoalsPage extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
-  var Goals = [GoalClass("Test Goals")];
+  var Goals = [GoalClass("Test Goals"),GoalClass("Test Goals 2")];
 
   @override
   Widget build(BuildContext context) {
@@ -41,25 +42,22 @@ class _GoalsPageState extends State<GoalsPage> {
               itemCount: Goals.length,
               itemBuilder: (context, index) {
                 final item = Goals[index];
-
-                try {
-                  return Material(
-                    child:
-                        InkWell(child: Container(child: (item as TextButton))),
-                  );
-                } catch (e) {
-                  return Material(
-                      child: InkWell(
-                          child: Container(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        (item as GoalClass).Description,
-                        style: TextStyle(color: Colors.black),
-                      ),
+                return Material(
+                    child: InkWell(
+                        child: Container(
+                  child: TextButton(
+                    onPressed: () {
+                      (Navigator.push(context,
+                          MaterialPageRoute<void>(builder: (BuildContext context) {
+                            return GoalShowPage(item);
+                          })));
+                    },
+                    child: Text(
+                      (item as GoalClass).Description,
+                      style: TextStyle(color: Colors.black),
                     ),
-                  )));
-                }
+                  ),
+                )));
               }),
         ),
       ),
