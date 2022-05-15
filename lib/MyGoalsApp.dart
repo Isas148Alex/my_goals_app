@@ -8,7 +8,8 @@ class MyGoalsApp extends StatelessWidget {
     return MaterialApp(
         title: "MyGoalsApp",
         theme: ThemeData.light(),
-        home: GoalsPage()
+        home: GoalsPage(),
+        debugShowCheckedModeBanner: false,
     );
   }
 }
