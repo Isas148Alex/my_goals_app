@@ -5,29 +5,31 @@ import 'GoalCreatePage.dart';
 import 'GoalShowPage.dart';
 
 class GoalsPage extends StatefulWidget {
+  const GoalsPage({Key? key}) : super(key: key);
+
   @override
   _GoalsPageState createState() => _GoalsPageState();
 }
 
 class _GoalsPageState extends State<GoalsPage> {
-  var Goals = [GoalClass("Test Goal", "G1"), GoalClass("Test Goal 2", "G2")];
+  var goals = [GoalClass("Test Goal", "G1"), GoalClass("Test Goal 2", "G2")];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Center(
+        title: const Center(
             child: Text(
-              "Мои цели",
-              style: TextStyle(color: Colors.black),
-            )),
+          "Мои цели",
+          style: TextStyle(color: Colors.black),
+        )),
       ),
       body: Center(
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.amber,
-            child: Icon(
+            child: const Icon(
               Icons.add,
               color: Colors.black,
             ),
@@ -36,47 +38,49 @@ class _GoalsPageState extends State<GoalsPage> {
             },
           ),
           body: ListView.builder(
-              itemCount: Goals.length,
+              itemCount: goals.length,
               itemBuilder: (context, index) {
-                final item = Goals[index];
+                final item = goals[index];
                 return Material(
                     child: InkWell(
-                        child: Container(
-                          child: TextButton(
-                            onPressed: () {
-                              (Navigator.push(context,
-                                  MaterialPageRoute<void>(
-                                      builder: (BuildContext context) {
-                                        return GoalShowPage(item);
-                                      })));
-                            },
-                            child: Text(
-                              (item as GoalClass).Name,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        )));
+                        child: TextButton(
+                  onPressed: () {
+                    _showGoalEnd(context, item);
+                  },
+                  child: Text(
+                    item.Name,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                )));
               }),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.amber,
         child: TextButton.icon(
-          icon: Icon(Icons.sort, color: Colors.black),
+          icon: const Icon(Icons.sort, color: Colors.black),
           onPressed: () {},
-          label: Text("Сортировка", style: TextStyle(color: Colors.black)),
+          label:
+              const Text("Сортировка", style: TextStyle(color: Colors.black)),
         ),
       ),
     );
   }
+
+  void _showGoalEnd(BuildContext context, GoalClass item) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return GoalShowPage(item);
+    })).then((value) => setState(() {}));
+  }
+
   void _navigateEnd(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-          return GoalCreatePage();
-        }));
-    if(result != null){
-      this.setState(() {
-        Goals.add(result);
+      return GoalCreatePage();
+    }));
+    if (result != null) {
+      setState(() {
+        goals.add(result);
       });
     }
   }
