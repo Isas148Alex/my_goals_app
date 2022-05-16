@@ -1,9 +1,8 @@
-//Will be used for main (top) logic
+///Used for main (top) logic
 
 import 'package:flutter/material.dart';
-import 'package:my_goals_app/MyGoalsApp.dart';
+import 'my_goals_app.dart';
 
 void main() {
-  runApp(MyGoalsApp());
+  runApp(const MyGoalsApp());
 }
-

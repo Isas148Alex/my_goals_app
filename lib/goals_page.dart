@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
+///Used for GoalsPage with related functional.
+///Allow to view all main goals and add a new main goal
 
-import 'GoalClass.dart';
-import 'GoalCreatePage.dart';
-import 'GoalShowPage.dart';
+import 'package:flutter/material.dart';
+import 'goal_class.dart';
+import 'goal_create_page.dart';
+import 'goal_show_page.dart';
+import 'constant_texts.dart';
 
 class GoalsPage extends StatefulWidget {
   const GoalsPage({Key? key}) : super(key: key);
 
   @override
-  _GoalsPageState createState() => _GoalsPageState();
+  State<GoalsPage> createState() => _GoalsPageState();
 }
 
 class _GoalsPageState extends State<GoalsPage> {
@@ -21,7 +24,7 @@ class _GoalsPageState extends State<GoalsPage> {
         backgroundColor: Colors.amber,
         title: const Center(
             child: Text(
-          "Мои цели",
+          ConstantTexts.myGoals,
           style: TextStyle(color: Colors.black),
         )),
       ),
@@ -34,7 +37,7 @@ class _GoalsPageState extends State<GoalsPage> {
               color: Colors.black,
             ),
             onPressed: () {
-              _navigateEnd(context);
+              _addNewGoal(context);
             },
           ),
           body: ListView.builder(
@@ -45,10 +48,10 @@ class _GoalsPageState extends State<GoalsPage> {
                     child: InkWell(
                         child: TextButton(
                   onPressed: () {
-                    _showGoalEnd(context, item);
+                    _viewGoal(context, item);
                   },
                   child: Text(
-                    item.Name,
+                    item.name,
                     style: const TextStyle(color: Colors.black),
                   ),
                 )));
@@ -60,23 +63,25 @@ class _GoalsPageState extends State<GoalsPage> {
         child: TextButton.icon(
           icon: const Icon(Icons.sort, color: Colors.black),
           onPressed: () {},
-          label:
-              const Text("Сортировка", style: TextStyle(color: Colors.black)),
+          label: const Text(ConstantTexts.sort,
+              style: TextStyle(color: Colors.black)),
         ),
       ),
     );
   }
 
-  void _showGoalEnd(BuildContext context, GoalClass item) {
+  ///Called when viewing a goal has been ended
+  void _viewGoal(BuildContext context, GoalClass item) {
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
       return GoalShowPage(item);
     })).then((value) => setState(() {}));
   }
 
-  void _navigateEnd(BuildContext context) async {
+  ///Allow to create a new goal
+  void _addNewGoal(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return GoalCreatePage();
+      return const GoalCreatePage();
     }));
     if (result != null) {
       setState(() {

@@ -1,11 +1,12 @@
-///Used for GoalShowPage with related functional
+///Used for GoalShowPage with related functional.
+///Allow to view a single goal, additional information and list of subgoals.
 
 import 'package:flutter/material.dart';
-import 'package:my_goals_app/GoalClass.dart';
-import 'package:my_goals_app/GoalChangePage.dart';
 import 'package:intl/intl.dart';
-
-import 'GoalCreatePage.dart';
+import 'goal_class.dart';
+import 'goal_change_page.dart';
+import 'constant_texts.dart';
+import 'goal_create_page.dart';
 
 class GoalShowPage extends StatefulWidget {
   GoalClass goal;
@@ -22,7 +23,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber,
-        onPressed: () => {_editGoalEnd(context)},
+        onPressed: () => {_editGoal(context)},
         child: const Icon(
           Icons.edit,
           color: Colors.black,
@@ -35,55 +36,56 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           backgroundColor: Colors.amber,
           title: Text(
-            widget.goal.Name,
+            widget.goal.name,
             style: const TextStyle(color: Colors.black),
           )),
       body: Column(
         children: [
-          const Text("Описание: "),
+          const Text(ConstantTexts.additionalInfo),
           Text(
-            widget.goal.Description,
+            widget.goal.additionalInfo,
           ),
-          const Text("Дата создания: "),
+          const Text(ConstantTexts.creationDate),
           Text(
-            DateFormat.yMMMEd().format(widget.goal.CreationDateTime),
+            DateFormat.yMMMEd().format(widget.goal.creationDateTime),
           ),
-          if (widget.goal.Achieved)
+          if (widget.goal.achieved)
             Column(children: [
-              const Text("Дата достижения: "),
+              const Text(ConstantTexts.achieveDate),
               Text(
-                DateFormat.yMd().format(widget.goal.AchieveDateTime),
+                DateFormat.yMd().format(widget.goal.achieveDateTime),
               )
             ]),
-          if (widget.goal.Changed)
+          if (widget.goal.changed)
             Column(children: [
-              const Text("Дата изменения: "),
+              const Text(ConstantTexts.changeDate),
               Text(
-                DateFormat.yMd().format(widget.goal.ChangingDateTime),
+                DateFormat.yMd().format(widget.goal.changingDateTime),
               )
             ]),
           Expanded(
               child: ListView.builder(
-                  itemCount: widget.goal.SubGoals.length + 1,
+                  itemCount: widget.goal.subgoals.length + 1,
                   itemBuilder: (context, index) {
-                    return _buildListSubGoals(index);
+                    return _buildListSubgoals(index);
                   }))
         ],
       ),
     );
   }
 
-  Widget _buildListSubGoals(int index) {
+  ///Allow to build the subgoals list
+  Widget _buildListSubgoals(int index) {
     if (index == 0) {
       return TextButton(
         onPressed: () {
-          _addSubGoalEnd(context);
+          _addSubGoal(context);
         },
-        child: const Text("Добавить"),
+        child: const Text(ConstantTexts.add),
       );
     }
     index--;
-    final goal = widget.goal.SubGoals[index];
+    final goal = widget.goal.subgoals[index];
     return Material(
         child: InkWell(
       child: TextButton(
@@ -94,17 +96,18 @@ class _GoalShowPageState extends State<GoalShowPage> {
           })));
         },
         child: Text(
-          goal.Name,
+          goal.name,
           style: const TextStyle(color: Colors.black),
         ),
       ),
     ));
   }
 
-  _addSubGoalEnd(BuildContext context) async {
+  ///Called when adding of a new subgoal has been ended
+  _addSubGoal(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return GoalCreatePage();
+      return const GoalCreatePage();
     }));
     if (result != null) {
       setState(() {
@@ -113,7 +116,8 @@ class _GoalShowPageState extends State<GoalShowPage> {
     }
   }
 
-  _editGoalEnd(BuildContext context) async {
+  ///Allow to edit a subgoal
+  _editGoal(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return GoalChangePage(widget.goal);

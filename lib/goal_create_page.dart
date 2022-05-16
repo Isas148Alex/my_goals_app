@@ -1,87 +1,92 @@
-///Used for GoalCreatePage with related functional
+///Used for GoalCreatePage with related functional.
+///Allow to create a new goal, with name and additional information.
 
 import 'package:flutter/material.dart';
-import 'package:my_goals_app/GoalClass.dart';
+import 'goal_class.dart';
+import 'constant_texts.dart';
 
 class GoalCreatePage extends StatefulWidget {
+  const GoalCreatePage({Key? key}) : super(key: key);
+
   @override
-  _GoalCreatePageState createState() => _GoalCreatePageState();
+  State<GoalCreatePage> createState() => _GoalCreatePageState();
 }
 
 class _GoalCreatePageState extends State<GoalCreatePage> {
-  final Name = TextEditingController();
-  final Description = TextEditingController();
+  final name = TextEditingController();
+  final description = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    Description.dispose();
-    Name.dispose();
+    description.dispose();
+    name.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+        onWillPop: _onWillPop,
         child: Scaffold(
           appBar: AppBar(
               centerTitle: true,
-              iconTheme: IconThemeData(
+              iconTheme: const IconThemeData(
                 color: Colors.black,
               ),
               backgroundColor: Colors.amber,
-              title: Text(
-                "Создать цель",
+              title: const Text(
+                ConstantTexts.createGoal,
                 style: TextStyle(color: Colors.black),
               )),
           body: Column(
             children: [
-              Text("Название: "),
+              const Text(ConstantTexts.name),
               TextField(
-                controller: Name,
+                controller: name,
               ),
-              Text("Описание: "),
+              const Text(ConstantTexts.additionalInfo),
               TextField(
-                controller: Description,
+                controller: description,
               ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.amber,
-            child: Icon(
+            child: const Icon(
               Icons.save,
               color: Colors.black,
             ),
             onPressed: () {
-              if (Description.text != "" && Name.text != "") {
-                Navigator.pop(context, GoalClass(Description.text, Name.text));
+              if (description.text != "" && name.text != "") {
+                Navigator.pop(context, GoalClass(description.text, name.text));
               }
             },
           ),
-        ),
-        onWillPop: _onWillPop);
+        ));
   }
 
+  ///Allow to use popup dialog for saving changes
   Future<bool> _onWillPop() async {
-    if (Description.text != "" || Name.text != "")
+    if (description.text != "" || name.text != "") {
       return (await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: new Text('Выйти без изменений?'),
-              //content: new Text('Do you want to exit an App'),
+              title: const Text(ConstantTexts.exitWithoutChanges),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: new Text('Да'),
+                  child: const Text(ConstantTexts.yes),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: new Text('Нет'),
+                  child: const Text(ConstantTexts.no),
                 ),
               ],
             ),
           )) ??
           false;
+    }
     return true;
   }
 }
