@@ -16,6 +16,7 @@ class GoalsPage extends StatefulWidget {
 
 class _GoalsPageState extends State<GoalsPage> {
   var goals = [GoalClass("Test Goal", "G1"), GoalClass("Test Goal 2", "G2")];
+  bool order = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,17 @@ class _GoalsPageState extends State<GoalsPage> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.amber,
         child: TextButton.icon(
-          icon: const Icon(Icons.sort, color: Colors.black),
-          onPressed: () {},
+          icon: const Icon(Icons.sort_by_alpha, color: Colors.black),
+          onPressed: () {
+            setState(() {
+              if(!order){
+                goals.sort((a, b) => a.name.compareTo(b.name));
+              } else{
+                goals.sort((a, b) => b.name.compareTo(a.name));
+              }
+              order = !order;
+            });
+          },
           label: const Text(ConstantTexts.sort,
               style: TextStyle(color: Colors.black)),
         ),
