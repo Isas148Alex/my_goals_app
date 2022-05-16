@@ -79,7 +79,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
         onPressed: () {
           _addSubGoalEnd(context);
         },
-        child: Text("Добавить"),
+        child: const Text("Добавить"),
       );
     }
     index--;
@@ -108,7 +108,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
     }));
     if (result != null) {
       setState(() {
-        widget.goal.SubGoals.add(result);
+        widget.goal.addSubGoal(result);
       });
     }
   }

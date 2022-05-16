@@ -31,6 +31,12 @@ class GoalClass{
     });
   }
 
+  void addSubGoal(GoalClass subGoal){
+    SubGoals.add(subGoal);
+    Changed = true;
+    ChangingDateTime = DateTime.now();
+  }
+
   ///Changes achieved state for goal
   ///No need pass value of DateTime, 'cause it will be calculated automatically
   void AchieveGoal(bool Achieved){
