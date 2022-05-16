@@ -19,38 +19,44 @@ class _GoalShowPageState extends State<GoalShowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
+        onPressed: () => {_editGoalEnd(context)},
+        child: const Icon(
+          Icons.edit,
+          color: Colors.black,
+        ),
+      ),
       appBar: AppBar(
           centerTitle: true,
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.black,
           ),
           backgroundColor: Colors.amber,
           title: Text(
             widget.goal.Name,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           )),
       body: Column(
         children: [
-          Text("Описание: "),
-          Container(
-              child: Text(
+          const Text("Описание: "),
+          Text(
             widget.goal.Description,
-          )),
-          Text("Дата создания: "),
-          Container(
-              child: Text(
+          ),
+          const Text("Дата создания: "),
+          Text(
             DateFormat.yMMMEd().format(widget.goal.CreationDateTime),
-          )),
+          ),
           if (widget.goal.Achieved)
             Column(children: [
-              Text("Дата достижения: "),
+              const Text("Дата достижения: "),
               Text(
                 DateFormat.yMd().format(widget.goal.AchieveDateTime),
               )
             ]),
           if (widget.goal.Changed)
             Column(children: [
-              Text("Дата изменения: "),
+              const Text("Дата изменения: "),
               Text(
                 DateFormat.yMd().format(widget.goal.ChangingDateTime),
               )
@@ -67,13 +73,14 @@ class _GoalShowPageState extends State<GoalShowPage> {
   }
 
   Widget _buildListSubGoals(int index) {
-    if (index == 0)
+    if (index == 0) {
       return TextButton(
         onPressed: () {
-          _navigateEnd(context);
+          _addSubGoalEnd(context);
         },
         child: Text("Добавить"),
       );
+    }
     index--;
     final goal = widget.goal.SubGoals[index];
     return Material(
@@ -86,21 +93,33 @@ class _GoalShowPageState extends State<GoalShowPage> {
           })));
         },
         child: Text(
-          (goal as GoalClass).Name,
-          style: TextStyle(color: Colors.black),
+          goal.Name,
+          style: const TextStyle(color: Colors.black),
         ),
       ),
     ));
   }
 
-  _navigateEnd(BuildContext context) async {
+  _addSubGoalEnd(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return GoalCreatePage();
     }));
     if (result != null) {
-      this.setState(() {
+      setState(() {
         widget.goal.SubGoals.add(result);
+      });
+    }
+  }
+
+  _editGoalEnd(BuildContext context) async {
+    final result = await Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+      return GoalChangePage();
+    }));
+    if (result != null) {
+      setState(() {
+        widget.goal = result;
       });
     }
   }
