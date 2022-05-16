@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_goals_app/GoalClass.dart';
+import 'package:my_goals_app/GoalChangePage.dart';
 import 'package:intl/intl.dart';
 
 import 'GoalCreatePage.dart';
@@ -115,7 +116,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
   _editGoalEnd(BuildContext context) async {
     final result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return GoalChangePage();
+      return GoalChangePage(widget.goal);
     }));
     if (result != null) {
       setState(() {
