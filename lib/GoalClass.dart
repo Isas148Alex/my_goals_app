@@ -14,13 +14,14 @@ class GoalClass{
 
   ///Update an existing goal with full information about it
   ///No need pass value of DateTime, 'cause it will be calculated automatically
-  void UpdateGoal(String Description, bool Achieved, List<GoalClass> AchievedSubGoals, List<GoalClass> DeletedSubGoals){
+  void UpdateGoal(String Name, String Description, bool Achieved, List<GoalClass> AchievedSubGoals, List<GoalClass> DeletedSubGoals){
     if(Achieved){
       AchieveDateTime = DateTime.now();
-      this.Achieved = Achieved;
     }
+    this.Achieved = Achieved;
     ChangingDateTime = DateTime.now();
     this.Description = Description;
+    this.Name = Name;
 
     SubGoals.removeWhere((element) => DeletedSubGoals.contains(element));
 
