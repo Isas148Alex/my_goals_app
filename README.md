@@ -1,6 +1,6 @@
 # my_goals_app
 
-Application for drive my goals
+Demo app on Flutter
 
 ## Getting Started
 
