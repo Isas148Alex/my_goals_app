@@ -67,8 +67,10 @@ class _GoalsPageState extends State<GoalsPage> {
                 child: Card(
                   child: ListTile(
                     onTap: () => _viewGoal(context, item),
-                    title: Center(
-                      child: Text(item.getName()),
+                    title: Text(item.getName()),
+                    trailing: Icon(
+                      item.getAchieved() ? Icons.check : Icons.close,
+                      color: item.getAchieved() ? Colors.green: Colors.red,
                     ),
                   ),
                 ),

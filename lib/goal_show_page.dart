@@ -48,20 +48,20 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           const Text(ConstantTexts.creationDate),
           Text(
-            DateFormat.yMMMEd().format(widget.goal.getCreationDate().toDate()),
+            DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getCreationDate().toDate()),
           ),
           if (widget.goal.getChanged())
             Column(children: [
               const Text(ConstantTexts.changeDate),
               Text(
-                DateFormat.yMd().format(widget.goal.getChangingDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getChangingDate().toDate()),
               )
             ]),
           if (widget.goal.getAchieved())
             Column(children: [
               const Text(ConstantTexts.achieveDate),
               Text(
-                DateFormat.yMd().format(widget.goal.getAchieveDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getAchieveDate().toDate()),
               )
             ]),
           Expanded(
