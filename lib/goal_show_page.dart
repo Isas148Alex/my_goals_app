@@ -48,20 +48,20 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           const Text(ConstantTexts.creationDate),
           Text(
-            DateFormat.yMMMEd().format(widget.goal.getCreationDate().toDate()),
+            DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getCreationDate().toDate()),
           ),
           if (widget.goal.getChanged())
             Column(children: [
               const Text(ConstantTexts.changeDate),
               Text(
-                DateFormat.yMd().format(widget.goal.getChangingDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getChangingDate().toDate()),
               )
             ]),
           if (widget.goal.getAchieved())
             Column(children: [
               const Text(ConstantTexts.achieveDate),
               Text(
-                DateFormat.yMd().format(widget.goal.getAchieveDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getAchieveDate().toDate()),
               )
             ]),
           Expanded(
@@ -89,39 +89,49 @@ class _GoalShowPageState extends State<GoalShowPage> {
     final goal = widget.goal.subgoals[index];
     return Dismissible(
       key: Key(goal.getId().toString()),
-      child: Card(
-          child: InkWell(
-              child: TextButton(
-                onPressed: () {
-                  _viewGoal(context, goal);
-                },
-                child: Text(
-                  goal.getName(),
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ))),
-      confirmDismiss: (direction) async {
-        return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text(ConstantTexts.deleteSure),
-            content: const Text(ConstantTexts.noRollback),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text(ConstantTexts.yes),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text(ConstantTexts.no),
-              ),
-            ],
+      direction: DismissDirection.endToStart,
+      background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 10),
+          child: const Icon(Icons.delete)),
+      child: InkWell(
+        child: Card(
+          child: ListTile(
+            onTap: () => _viewGoal(context, goal),
+            title: Center(
+              child: Text(goal.getName()),
+            ),
           ),
-        ) ??
-            false;
+        ),
+      ),
+      confirmDismiss: (direction) {
+        return _confirmDismiss(direction, goal);
       },
       onDismissed: (direction) => _deleteItem(goal),
     );
+  }
+
+  Future<bool> _confirmDismiss(
+      DismissDirection direction, GoalClass goal) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(ConstantTexts.deleteSure),
+        content: const Text(ConstantTexts.noRollback),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text(ConstantTexts.yes),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text(ConstantTexts.no),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 
   void _viewGoal(BuildContext context, GoalClass item) {

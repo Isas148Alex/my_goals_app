@@ -11,7 +11,7 @@ class MyGoalsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: ConstantTexts.myGoalsApp,
-      theme: ThemeData.light(),
+      theme: ThemeData.dark(),
       home: const GoalsPage(),
       debugShowCheckedModeBanner: false,
     );

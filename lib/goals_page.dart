@@ -22,15 +22,16 @@ class _GoalsPageState extends State<GoalsPage> {
   @override
   void initState() {
     super.initState();
-    goals = DataBaseHandler.getDataFromBase();
+    DataBaseHandler.getDataFromBase(goals);
   }
 
   @override
   Widget build(BuildContext context) {
-    goals = DataBaseHandler.rebuildGoals(goals);
+    setState(() {
+      DataBaseHandler.rebuildGoals(goals);
+    });
 
     return Scaffold(
-      key: ValueKey("0"),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Center(
@@ -53,38 +54,29 @@ class _GoalsPageState extends State<GoalsPage> {
           itemCount: goals.length,
           itemBuilder: (context, index) {
             final item = goals[index];
+
             return Dismissible(
               key: Key(item.getId().toString()),
-              child: Card(
-                  child: InkWell(
-                      child: TextButton(
-                onPressed: () {
-                  _viewGoal(context, item);
-                },
-                child: Text(
-                  item.getName(),
-                  style: const TextStyle(color: Colors.black),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 10),
+                  child: const Icon(Icons.delete)),
+              child: InkWell(
+                child: Card(
+                  child: ListTile(
+                    onTap: () => _viewGoal(context, item),
+                    title: Text(item.getName()),
+                    trailing: Icon(
+                      item.getAchieved() ? Icons.check : Icons.close,
+                      color: item.getAchieved() ? Colors.green: Colors.red,
+                    ),
+                  ),
                 ),
-              ))),
-              confirmDismiss: (direction) async {
-                return await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text(ConstantTexts.deleteSure),
-                        content: const Text(ConstantTexts.noRollback),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text(ConstantTexts.yes),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text(ConstantTexts.no),
-                          ),
-                        ],
-                      ),
-                    ) ??
-                    false;
+              ),
+              confirmDismiss: (direction) {
+                return _confirmDismiss(direction, item);
               },
               onDismissed: (direction) => _deleteItem(item),
             );
@@ -110,6 +102,28 @@ class _GoalsPageState extends State<GoalsPage> {
     );
   }
 
+  Future<bool> _confirmDismiss(
+      DismissDirection direction, GoalClass goal) async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text(ConstantTexts.deleteSure),
+            content: const Text(ConstantTexts.noRollback),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text(ConstantTexts.yes),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text(ConstantTexts.no),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   ///Called when viewing a goal has been ended
   void _viewGoal(BuildContext context, GoalClass item) {
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
@@ -118,10 +132,8 @@ class _GoalsPageState extends State<GoalsPage> {
   }
 
   void _deleteItem(GoalClass goal) {
-    setState((){
-      DataBaseHandler.deleteDataBase(goal);
-      goals.remove(goal);
-    });
+    DataBaseHandler.deleteDataBase(goal);
+    goals.remove(goal);
   }
 
   ///Allow to create a new goal

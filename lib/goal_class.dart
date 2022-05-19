@@ -74,10 +74,10 @@ class GoalClass {
   void achieveGoal(bool achieved) {
     if (achieved) {
       _achieveDateTime = Timestamp.now();
-      _achieved = achieved;
     } else {
       _achieveDateTime = Timestamp(0, 0);
     }
+    _achieved = achieved;
     _changingDateTime = Timestamp.now();
   }
 
