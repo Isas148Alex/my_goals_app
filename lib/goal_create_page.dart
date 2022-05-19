@@ -7,8 +7,9 @@ import 'constant_texts.dart';
 
 class GoalCreatePage extends StatefulWidget {
   int? parentId;
-  GoalCreatePage({Key? key, int? parentId}) : super(key: key){
-    this.parentId = parentId?? 0;
+
+  GoalCreatePage({Key? key, int? parentId}) : super(key: key) {
+    this.parentId = parentId ?? 0;
   }
 
   @override
@@ -61,8 +62,10 @@ class _GoalCreatePageState extends State<GoalCreatePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              if (additionalInfo.text != "" && name.text != "") {
-                Navigator.of(context).pop(GoalClass(additionalInfo.text, name.text, parent: widget.parentId));
+              if (name.text != "") {
+                Navigator.of(context).pop(GoalClass(
+                    additionalInfo.text, name.text,
+                    parent: widget.parentId));
               }
             },
           ),
