@@ -24,9 +24,9 @@ class _GoalChangePageState extends State<GoalChangePage> {
   @override
   void initState() {
     super.initState();
-    isChecked = widget.goal.achieved;
-    nameBuf = widget.goal.name;
-    additionalInfoBuf = widget.goal.additionalInfo;
+    isChecked = widget.goal.getAchieved();
+    nameBuf = widget.goal.getName();
+    additionalInfoBuf = widget.goal.getAdditionalInfo();
   }
 
   @override
@@ -102,7 +102,7 @@ class _GoalChangePageState extends State<GoalChangePage> {
       child: TextButton(
         onPressed: () {},
         child: Text(
-          goal.name,
+          goal.getName(),
           style: const TextStyle(color: Colors.black),
         ),
       ),
@@ -113,8 +113,8 @@ class _GoalChangePageState extends State<GoalChangePage> {
   Future<bool> _onWillPop() async {
     if (additionalInfo.text != "" &&
         name.text != "" &&
-        (additionalInfo.text != widget.goal.additionalInfo ||
-            name.text != widget.goal.name)) {
+        (additionalInfo.text != widget.goal.getAdditionalInfo() ||
+            name.text != widget.goal.getName())) {
       return (await showDialog(
             context: context,
             builder: (context) => AlertDialog(

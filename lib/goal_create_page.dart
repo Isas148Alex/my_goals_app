@@ -6,7 +6,10 @@ import 'goal_class.dart';
 import 'constant_texts.dart';
 
 class GoalCreatePage extends StatefulWidget {
-  const GoalCreatePage({Key? key}) : super(key: key);
+  int? parentId;
+  GoalCreatePage({Key? key, int? parentId}) : super(key: key){
+    this.parentId = parentId?? 0;
+  }
 
   @override
   State<GoalCreatePage> createState() => _GoalCreatePageState();
@@ -14,12 +17,12 @@ class GoalCreatePage extends StatefulWidget {
 
 class _GoalCreatePageState extends State<GoalCreatePage> {
   final name = TextEditingController();
-  final description = TextEditingController();
+  final additionalInfo = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    description.dispose();
+    additionalInfo.dispose();
     name.dispose();
     super.dispose();
   }
@@ -47,7 +50,7 @@ class _GoalCreatePageState extends State<GoalCreatePage> {
               ),
               const Text(ConstantTexts.additionalInfo),
               TextField(
-                controller: description,
+                controller: additionalInfo,
               ),
             ],
           ),
@@ -58,8 +61,8 @@ class _GoalCreatePageState extends State<GoalCreatePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              if (description.text != "" && name.text != "") {
-                Navigator.pop(context, GoalClass(description.text, name.text));
+              if (additionalInfo.text != "" && name.text != "") {
+                Navigator.of(context).pop(GoalClass(additionalInfo.text, name.text, parent: widget.parentId));
               }
             },
           ),
@@ -68,7 +71,7 @@ class _GoalCreatePageState extends State<GoalCreatePage> {
 
   ///Allow to use popup dialog for saving changes
   Future<bool> _onWillPop() async {
-    if (description.text != "" || name.text != "") {
+    if (additionalInfo.text != "" || name.text != "") {
       return (await showDialog(
             context: context,
             builder: (context) => AlertDialog(

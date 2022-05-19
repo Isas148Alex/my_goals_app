@@ -7,6 +7,8 @@ class ConstantTexts {
   static const yes = "Да";
   static const no = "Нет";
   static const exitWithoutChanges = "Выйти без изменений?";
+  static const deleteSure = "Уверены, что хотите удалить цель?";
+  static const noRollback = "Отменить данное действие будет невозможно";
   static const add = "Добавить";
   static const creationDate = "Дата создания";
   static const changeDate = "Дата изменения";

@@ -1,35 +1,58 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_goals_app/data_base_handler.dart';
+
 ///GoalClass is used for definition of data model in fact.
 ///For the begin it is just tree node with information related the goal
 ///and an elements of the same type, and also some additional information about
 ///creation and changes.
 
 class GoalClass {
+  late int _id;
+  int getId() { return _id; }
+
+  late int _parent;
+  int getParent() { return _parent; }
+
+  late String _name;
+  String getName() { return _name; }
+
+  late String _additionalInfo;
+  String getAdditionalInfo() { return _additionalInfo; }
+
+  Timestamp _creationDateTime = Timestamp.now();
+  Timestamp getCreationDate() { return _creationDateTime; }
+
+  Timestamp _changingDateTime = Timestamp(0, 0);
+  Timestamp getChangingDate() { return _changingDateTime; }
+
+  Timestamp _achieveDateTime = Timestamp(0, 0);
+  Timestamp getAchieveDate() { return _achieveDateTime; }
+
+  bool _achieved = false;
+  bool getAchieved() { return _achieved; }
+
+  bool _changed = false;
+  bool getChanged() { return _changed; }
+
   List<GoalClass> subgoals = [];
-  late String additionalInfo;
-  late String name;
-  late DateTime creationDateTime;
-  late DateTime changingDateTime = DateTime(0);
-  late DateTime achieveDateTime = DateTime(0);
-  bool achieved = false;
-  bool changed = false;
 
   ///Update an existing goal with full information about it.
   void updateGoal(String name, String additionalInfo, bool achieved,
       List<GoalClass> achievedSubgoals, List<GoalClass> deletedSubgoals) {
-    if (this.achieved != achieved ||
-        this.name != name ||
-        this.additionalInfo != additionalInfo ||
+    if (_achieved != achieved ||
+        _name != name ||
+        _additionalInfo != additionalInfo ||
         achievedSubgoals.isNotEmpty ||
         deletedSubgoals.isNotEmpty) {
-      changed = true;
-      changingDateTime = DateTime.now();
+      _changed = true;
+      _changingDateTime = Timestamp.now();
     }
     if (achieved) {
-      achieveDateTime = DateTime.now();
+      _achieveDateTime = Timestamp.now();
     }
-    this.achieved = achieved;
-    this.additionalInfo = additionalInfo;
-    this.name = name;
+    _achieved = achieved;
+    _additionalInfo = additionalInfo;
+    _name = name;
 
     subgoals.removeWhere((element) => deletedSubgoals.contains(element));
 
@@ -43,24 +66,52 @@ class GoalClass {
   ///Add a new subgoal and also change status "changed" on true.
   void addSubGoal(GoalClass subgoal) {
     subgoals.add(subgoal);
-    changed = true;
-    changingDateTime = DateTime.now();
+    _changed = true;
+    _changingDateTime = Timestamp.now();
   }
 
   ///Changes achieved state for goal.
   void achieveGoal(bool achieved) {
     if (achieved) {
-      achieveDateTime = DateTime.now();
-      this.achieved = achieved;
+      _achieveDateTime = Timestamp.now();
+      _achieved = achieved;
     } else {
-      achieveDateTime = DateTime(0);
+      _achieveDateTime = Timestamp(0, 0);
     }
-    changingDateTime = DateTime.now();
+    _changingDateTime = Timestamp.now();
   }
 
   ///Constructor takes a name and additional info, 'cause only this values known
   ///at the moment of creation
-  GoalClass(this.additionalInfo, this.name) {
-    creationDateTime = DateTime.now();
+  GoalClass(this._additionalInfo, this._name, {int? parent}) {
+    _id = DataBaseHandler.getId();
+    _creationDateTime = Timestamp.now();
+    _parent = parent ?? 0;
+  }
+
+  GoalClass.fromQuery(
+      this._id,
+      this._parent,
+      this._name,
+      this._additionalInfo,
+      this._creationDateTime,
+      this._changingDateTime,
+      this._achieveDateTime,
+      this._achieved,
+      this._changed,
+      );
+
+  static GoalClass? findGoal(List<GoalClass> goals, int id){
+    for (var goal in goals) {
+      if(goal._id == id) {
+        return goal;
+      }
+
+      GoalClass? goalCandidate = findGoal(goal.subgoals, id);
+      if(goalCandidate != null) {
+        return goalCandidate;
+      }
+    }
+    return null;
   }
 }

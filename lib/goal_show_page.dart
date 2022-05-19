@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_goals_app/data_base_handler.dart';
 import 'goal_class.dart';
 import 'goal_change_page.dart';
 import 'constant_texts.dart';
@@ -36,31 +37,31 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           backgroundColor: Colors.amber,
           title: Text(
-            widget.goal.name,
+            widget.goal.getName(),
             style: const TextStyle(color: Colors.black),
           )),
       body: Column(
         children: [
           const Text(ConstantTexts.additionalInfo),
           Text(
-            widget.goal.additionalInfo,
+            widget.goal.getAdditionalInfo(),
           ),
           const Text(ConstantTexts.creationDate),
           Text(
-            DateFormat.yMMMEd().format(widget.goal.creationDateTime),
+            DateFormat.yMMMEd().format(widget.goal.getCreationDate().toDate()),
           ),
-          if (widget.goal.achieved)
-            Column(children: [
-              const Text(ConstantTexts.achieveDate),
-              Text(
-                DateFormat.yMd().format(widget.goal.achieveDateTime),
-              )
-            ]),
-          if (widget.goal.changed)
+          if (widget.goal.getChanged())
             Column(children: [
               const Text(ConstantTexts.changeDate),
               Text(
-                DateFormat.yMd().format(widget.goal.changingDateTime),
+                DateFormat.yMd().format(widget.goal.getChangingDate().toDate()),
+              )
+            ]),
+          if (widget.goal.getAchieved())
+            Column(children: [
+              const Text(ConstantTexts.achieveDate),
+              Text(
+                DateFormat.yMd().format(widget.goal.getAchieveDate().toDate()),
               )
             ]),
           Expanded(
@@ -86,32 +87,66 @@ class _GoalShowPageState extends State<GoalShowPage> {
     }
     index--;
     final goal = widget.goal.subgoals[index];
-    return Material(
-        child: InkWell(
-      child: TextButton(
-        onPressed: () {
-          (Navigator.push(context,
-              MaterialPageRoute<void>(builder: (BuildContext context) {
-            return GoalShowPage(goal);
-          })));
-        },
-        child: Text(
-          goal.name,
-          style: const TextStyle(color: Colors.black),
-        ),
-      ),
-    ));
+    return Dismissible(
+      key: Key(goal.getId().toString()),
+      child: Card(
+          child: InkWell(
+              child: TextButton(
+                onPressed: () {
+                  _viewGoal(context, goal);
+                },
+                child: Text(
+                  goal.getName(),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ))),
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text(ConstantTexts.deleteSure),
+            content: const Text(ConstantTexts.noRollback),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text(ConstantTexts.yes),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text(ConstantTexts.no),
+              ),
+            ],
+          ),
+        ) ??
+            false;
+      },
+      onDismissed: (direction) => _deleteItem(goal),
+    );
+  }
+
+  void _viewGoal(BuildContext context, GoalClass item) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return GoalShowPage(item);
+    })).then((value) => setState(() {}));
+  }
+
+  void _deleteItem(GoalClass goal) {
+    setState((){
+      widget.goal.subgoals.remove(goal);
+      DataBaseHandler.deleteDataBase(goal);
+    });
   }
 
   ///Called when adding of a new subgoal has been ended
   _addSubGoal(BuildContext context) async {
-    final result = await Navigator.push(context,
+    final result = await Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) {
-      return const GoalCreatePage();
+      return GoalCreatePage(parentId: widget.goal.getId());
     }));
     if (result != null) {
       setState(() {
         widget.goal.addSubGoal(result);
+        DataBaseHandler.addDataBase(result);
       });
     }
   }
@@ -125,6 +160,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
     if (result != null) {
       setState(() {
         widget.goal = result;
+        DataBaseHandler.updateDataBase(result);
       });
     }
   }
