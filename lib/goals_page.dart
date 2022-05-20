@@ -62,7 +62,9 @@ class _GoalsPageState extends State<GoalsPage> {
                   color: Colors.red,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 10),
-                  child: const Icon(Icons.delete)),
+                  child: const Icon(
+                    Icons.delete,
+                  )),
               child: InkWell(
                 child: Card(
                   child: ListTile(
@@ -70,7 +72,7 @@ class _GoalsPageState extends State<GoalsPage> {
                     title: Text(item.getName()),
                     trailing: Icon(
                       item.getAchieved() ? Icons.check : Icons.close,
-                      color: item.getAchieved() ? Colors.green: Colors.red,
+                      color: item.getAchieved() ? Colors.green : Colors.red,
                     ),
                   ),
                 ),

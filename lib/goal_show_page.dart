@@ -48,20 +48,23 @@ class _GoalShowPageState extends State<GoalShowPage> {
           ),
           const Text(ConstantTexts.creationDate),
           Text(
-            DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getCreationDate().toDate()),
+            DateFormat('HH:mm dd.MM.yyyy')
+                .format(widget.goal.getCreationDate().toDate()),
           ),
           if (widget.goal.getChanged())
             Column(children: [
               const Text(ConstantTexts.changeDate),
               Text(
-                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getChangingDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy')
+                    .format(widget.goal.getChangingDate().toDate()),
               )
             ]),
           if (widget.goal.getAchieved())
             Column(children: [
               const Text(ConstantTexts.achieveDate),
               Text(
-                DateFormat('HH:mm dd.MM.yyyy').format(widget.goal.getAchieveDate().toDate()),
+                DateFormat('HH:mm dd.MM.yyyy')
+                    .format(widget.goal.getAchieveDate().toDate()),
               )
             ]),
           Expanded(
@@ -115,22 +118,22 @@ class _GoalShowPageState extends State<GoalShowPage> {
   Future<bool> _confirmDismiss(
       DismissDirection direction, GoalClass goal) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(ConstantTexts.deleteSure),
-        content: const Text(ConstantTexts.noRollback),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text(ConstantTexts.yes),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text(ConstantTexts.deleteSure),
+            content: const Text(ConstantTexts.noRollback),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text(ConstantTexts.yes),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text(ConstantTexts.no),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text(ConstantTexts.no),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
@@ -141,7 +144,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
   }
 
   void _deleteItem(GoalClass goal) {
-    setState((){
+    setState(() {
       widget.goal.subgoals.remove(goal);
       DataBaseHandler.deleteDataBase(goal);
     });
@@ -149,8 +152,8 @@ class _GoalShowPageState extends State<GoalShowPage> {
 
   ///Called when adding of a new subgoal has been ended
   _addSubGoal(BuildContext context) async {
-    final result = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (BuildContext context) {
+    final result = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
       return GoalCreatePage(parentId: widget.goal.getId());
     }));
     if (result != null) {
