@@ -97,16 +97,17 @@ class _GoalChangePageState extends State<GoalChangePage> {
   ///Allow to build the subgoals list
   Widget _buildListSubgoals(int index) {
     final goal = widget.goal.subgoals[index];
-    return Material(
-        child: InkWell(
-      child: TextButton(
-        onPressed: () {},
-        child: Text(
-          goal.getName(),
-          style: const TextStyle(color: Colors.black),
+    return InkWell(
+      child: Card(
+        key: Key(goal.getId().toString()),
+        child: ListTile(
+          onTap: () => {},
+          title: Center(
+            child: Text(goal.getName()),
+          ),
         ),
       ),
-    ));
+    );
   }
 
   ///Allow to use popup dialog for saving changes
@@ -116,8 +117,9 @@ class _GoalChangePageState extends State<GoalChangePage> {
         (additionalInfo.text != widget.goal.getAdditionalInfo() ||
             name.text != widget.goal.getName())) {
       return (await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
               title: const Text(ConstantTexts.exitWithoutChanges),
               actions: <Widget>[
                 TextButton(
@@ -130,7 +132,7 @@ class _GoalChangePageState extends State<GoalChangePage> {
                 ),
               ],
             ),
-          )) ??
+      )) ??
           false;
     }
     return true;

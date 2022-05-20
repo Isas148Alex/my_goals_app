@@ -5,6 +5,7 @@ class DataBaseHandler {
   static int _maxId = 1;
 
   static int getId() {
+    _maxId++;
     return _maxId;
   }
 
@@ -27,9 +28,10 @@ class DataBaseHandler {
         .collection('goals')
         .snapshots()
         .forEach((snapshot) {
-      goals.clear();
-      for (var doc in snapshot.docs) {
-        goals.add(buildGoal(doc, int.parse(doc.id)));
+      if (goals.isEmpty) {
+        for (var doc in snapshot.docs) {
+          goals.add(buildGoal(doc, int.parse(doc.id)));
+        }
       }
       rebuildGoals(goals);
     });
@@ -54,8 +56,6 @@ class DataBaseHandler {
   }
 
   static void addDataBase(GoalClass goal) {
-    _maxId++;
-
     FirebaseFirestore.instance
         .collection('goals')
         .doc(goal.getId().toString())
