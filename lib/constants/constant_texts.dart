@@ -19,4 +19,7 @@ class ConstantTexts {
   static const additionalInfo = "Дополнительная информация";
   static const achieved = "Достигнута";
   static const sort = "Сортировка";
+  static const doneSure = "Уверены, что хотите отметить цель достигнутой?";
+  static const undoSure = "Уверены, что хотите отметить цель недостигнутой?";
+  static const rollback = "Можно отменить действие в любой момент";
 }

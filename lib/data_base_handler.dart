@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_goals_app/goal_class.dart';
+import 'package:my_goals_app/model/goal_class.dart';
 
 class DataBaseHandler {
   static int _maxId = 1;
@@ -33,6 +33,7 @@ class DataBaseHandler {
           goals.add(buildGoal(doc, int.parse(doc.id)));
         }
       }
+    }).then((_){
       rebuildGoals(goals);
     });
   }

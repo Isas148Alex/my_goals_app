@@ -2,8 +2,9 @@
 ///Allow to change current goal, its status (achieved or not) and additional information.
 
 import 'package:flutter/material.dart';
-import 'goal_class.dart';
-import 'constant_texts.dart';
+import '../constants/theme_constants.dart';
+import '../model/goal_class.dart';
+import '../constants/constant_texts.dart';
 
 class GoalChangePage extends StatefulWidget {
   GoalClass goal;
@@ -44,54 +45,67 @@ class _GoalChangePageState extends State<GoalChangePage> {
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.amber,
-              onPressed: () => {_editGoalEnd(context)},
-              child: const Icon(
-                Icons.save,
-                color: Colors.black,
-              ),
-            ),
-            appBar: AppBar(
-                centerTitle: true,
-                iconTheme: const IconThemeData(
-                  color: Colors.black,
-                ),
-                backgroundColor: Colors.amber,
-                title: const Text(
-                  ConstantTexts.changeGoal,
-                  style: TextStyle(color: Colors.black),
-                )),
-            body: Column(
-              children: [
-                const Text(ConstantTexts.name),
-                TextField(
-                  controller: name,
-                ),
-                const Text(ConstantTexts.additionalInfo),
-                TextField(
-                  controller: additionalInfo,
-                ),
-                const Text(ConstantTexts.achieved),
-                Checkbox(
-                  checkColor: Colors.white,
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      nameBuf = name.text;
-                      additionalInfoBuf = additionalInfo.text;
-                      isChecked = value!;
-                    });
-                  },
-                ),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: widget.goal.subgoals.length,
-                        itemBuilder: (context, index) {
-                          return _buildListSubgoals(index);
-                        }))
-              ],
-            )));
+          appBar: _buildScaffoldAppBar(),
+          floatingActionButton: _buildScaffoldFloatingActionButton(),
+          body: _buildScaffoldBody(),
+        ));
+  }
+
+  AppBar _buildScaffoldAppBar() {
+    return AppBar(
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: ConstantsTheme.darkColor,
+        ),
+        backgroundColor: ConstantsTheme.mainColor,
+        title: const Text(
+          ConstantTexts.changeGoal,
+          style: TextStyle(color: ConstantsTheme.darkColor),
+        ));
+  }
+
+  Widget _buildScaffoldFloatingActionButton() {
+    return FloatingActionButton(
+      backgroundColor: ConstantsTheme.mainColor,
+      onPressed: () => {_editGoalEnd(context)},
+      child: const Icon(
+        Icons.save,
+        color: ConstantsTheme.darkColor,
+      ),
+    );
+  }
+
+  Widget _buildScaffoldBody() {
+    return Column(
+      children: [
+        const Text(ConstantTexts.name),
+        TextField(
+          controller: name,
+        ),
+        const Text(ConstantTexts.additionalInfo),
+        TextField(
+          controller: additionalInfo,
+        ),
+        const Text(ConstantTexts.achieved),
+        Checkbox(
+          checkColor: ConstantsTheme.lightColor,
+          value: isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              nameBuf = name.text;
+              additionalInfoBuf = additionalInfo.text;
+              isChecked = value!;
+            });
+          },
+        ),
+        Expanded(
+            child: ListView.builder(
+                itemCount: widget.goal.subgoals.length,
+                itemBuilder: (context, index) {
+                  return _buildListSubgoals(index);
+                }))
+      ],
+    );
   }
 
   ///Allow to build the subgoals list
@@ -117,9 +131,8 @@ class _GoalChangePageState extends State<GoalChangePage> {
         (additionalInfo.text != widget.goal.getAdditionalInfo() ||
             name.text != widget.goal.getName())) {
       return (await showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(
+            context: context,
+            builder: (context) => AlertDialog(
               title: const Text(ConstantTexts.exitWithoutChanges),
               actions: <Widget>[
                 TextButton(
@@ -132,7 +145,7 @@ class _GoalChangePageState extends State<GoalChangePage> {
                 ),
               ],
             ),
-      )) ??
+          )) ??
           false;
     }
     return true;
