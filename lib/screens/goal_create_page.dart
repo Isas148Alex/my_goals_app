@@ -2,8 +2,9 @@
 ///Allow to create a new goal, with name and additional information.
 
 import 'package:flutter/material.dart';
-import 'goal_class.dart';
-import 'constant_texts.dart';
+import '../constants/theme_constants.dart';
+import '../model/goal_class.dart';
+import '../constants/constant_texts.dart';
 
 class GoalCreatePage extends StatefulWidget {
   int? parentId;
@@ -33,43 +34,54 @@ class _GoalCreatePageState extends State<GoalCreatePage> {
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
-          appBar: AppBar(
-              centerTitle: true,
-              iconTheme: const IconThemeData(
-                color: Colors.black,
-              ),
-              backgroundColor: Colors.amber,
-              title: const Text(
-                ConstantTexts.createGoal,
-                style: TextStyle(color: Colors.black),
-              )),
-          body: Column(
-            children: [
-              const Text(ConstantTexts.name),
-              TextField(
-                controller: name,
-              ),
-              const Text(ConstantTexts.additionalInfo),
-              TextField(
-                controller: additionalInfo,
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.amber,
-            child: const Icon(
-              Icons.save,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              if (name.text != "") {
-                Navigator.of(context).pop(GoalClass(
-                    additionalInfo.text, name.text,
-                    parent: widget.parentId));
-              }
-            },
-          ),
+          appBar: _buildScaffoldAppBar(),
+          floatingActionButton: _buildScaffoldFloatingActionButton(),
+          body: _buildScaffoldBody(),
         ));
+  }
+
+  AppBar _buildScaffoldAppBar() {
+    return AppBar(
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: ConstantsTheme.darkColor,
+        ),
+        backgroundColor: ConstantsTheme.mainColor,
+        title: const Text(
+          ConstantTexts.createGoal,
+          style: TextStyle(color: ConstantsTheme.darkColor),
+        ));
+  }
+
+  Widget _buildScaffoldFloatingActionButton() {
+    return FloatingActionButton(
+      backgroundColor: ConstantsTheme.mainColor,
+      child: const Icon(
+        Icons.save,
+        color: ConstantsTheme.darkColor,
+      ),
+      onPressed: () {
+        if (name.text != "") {
+          Navigator.of(context).pop(GoalClass(additionalInfo.text, name.text,
+              parent: widget.parentId));
+        }
+      },
+    );
+  }
+
+  Widget _buildScaffoldBody() {
+    return Column(
+      children: [
+        const Text(ConstantTexts.name),
+        TextField(
+          controller: name,
+        ),
+        const Text(ConstantTexts.additionalInfo),
+        TextField(
+          controller: additionalInfo,
+        ),
+      ],
+    );
   }
 
   ///Allow to use popup dialog for saving changes

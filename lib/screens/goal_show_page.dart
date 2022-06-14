@@ -4,9 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_goals_app/data_base_handler.dart';
-import 'goal_class.dart';
+import '../constants/theme_constants.dart';
+import '../model/goal_class.dart';
 import 'goal_change_page.dart';
-import 'constant_texts.dart';
+import '../constants/constant_texts.dart';
 import 'goal_create_page.dart';
 
 class GoalShowPage extends StatefulWidget {
@@ -22,59 +23,71 @@ class _GoalShowPageState extends State<GoalShowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.amber,
-        onPressed: () => {_editGoal(context)},
-        child: const Icon(
-          Icons.edit,
-          color: Colors.black,
+      appBar: _buildScaffoldAppBar(),
+      floatingActionButton: _buildScaffoldFloatingActionButton(),
+      body: _buildScaffoldBody(),
+    );
+  }
+
+  AppBar _buildScaffoldAppBar() {
+    return AppBar(
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: ConstantsTheme.darkColor,
         ),
+        backgroundColor: ConstantsTheme.mainColor,
+        title: Text(
+          widget.goal.getName(),
+          style: const TextStyle(color: ConstantsTheme.darkColor),
+        ));
+  }
+
+  Widget _buildScaffoldFloatingActionButton() {
+    return FloatingActionButton(
+      backgroundColor: ConstantsTheme.mainColor,
+      onPressed: () => {_editGoal(context)},
+      child: const Icon(
+        Icons.edit,
+        color: ConstantsTheme.darkColor,
       ),
-      appBar: AppBar(
-          centerTitle: true,
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          backgroundColor: Colors.amber,
-          title: Text(
-            widget.goal.getName(),
-            style: const TextStyle(color: Colors.black),
-          )),
-      body: Column(
-        children: [
-          const Text(ConstantTexts.additionalInfo),
-          Text(
-            widget.goal.getAdditionalInfo(),
-          ),
-          const Text(ConstantTexts.creationDate),
-          Text(
-            DateFormat('HH:mm dd.MM.yyyy')
-                .format(widget.goal.getCreationDate().toDate()),
-          ),
-          if (widget.goal.getChanged())
-            Column(children: [
-              const Text(ConstantTexts.changeDate),
-              Text(
-                DateFormat('HH:mm dd.MM.yyyy')
-                    .format(widget.goal.getChangingDate().toDate()),
-              )
-            ]),
-          if (widget.goal.getAchieved())
-            Column(children: [
-              const Text(ConstantTexts.achieveDate),
-              Text(
-                DateFormat('HH:mm dd.MM.yyyy')
-                    .format(widget.goal.getAchieveDate().toDate()),
-              )
-            ]),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: widget.goal.subgoals.length + 1,
-                  itemBuilder: (context, index) {
-                    return _buildListSubgoals(index);
-                  }))
-        ],
-      ),
+    );
+  }
+
+  Widget _buildScaffoldBody() {
+    return Column(
+      children: [
+        const Text(ConstantTexts.additionalInfo),
+        Text(
+          widget.goal.getAdditionalInfo(),
+        ),
+        const Text(ConstantTexts.creationDate),
+        Text(
+          DateFormat(ConstantsTheme.dateFormat)
+              .format(widget.goal.getCreationDate().toDate()),
+        ),
+        if (widget.goal.getChanged())
+          Column(children: [
+            const Text(ConstantTexts.changeDate),
+            Text(
+              DateFormat(ConstantsTheme.dateFormat)
+                  .format(widget.goal.getChangingDate().toDate()),
+            )
+          ]),
+        if (widget.goal.getAchieved())
+          Column(children: [
+            const Text(ConstantTexts.achieveDate),
+            Text(
+              DateFormat(ConstantsTheme.dateFormat)
+                  .format(widget.goal.getAchieveDate().toDate()),
+            )
+          ]),
+        Expanded(
+            child: ListView.builder(
+                itemCount: widget.goal.subgoals.length + 1,
+                itemBuilder: (context, index) {
+                  return _buildListSubgoals(index);
+                }))
+      ],
     );
   }
 
@@ -94,7 +107,7 @@ class _GoalShowPageState extends State<GoalShowPage> {
       key: Key(goal.getId().toString()),
       direction: DismissDirection.endToStart,
       background: Container(
-          color: Colors.red,
+          color: ConstantsTheme.redColor,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 10),
           child: const Icon(Icons.delete)),
