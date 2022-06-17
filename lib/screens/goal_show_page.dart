@@ -102,30 +102,83 @@ class _GoalShowPageState extends State<GoalShowPage> {
       );
     }
     index--;
-    final goal = widget.goal.subgoals[index];
+    final item = widget.goal.subgoals[index];
+
     return Dismissible(
-      key: Key(goal.getId().toString()),
-      direction: DismissDirection.endToStart,
+      key: Key(item.getId().toString()),
       background: Container(
+        color: item.getAchieved()
+            ? ConstantsTheme.yellowColor
+            : ConstantsTheme.greenColor,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(left: 10),
+        child: item.getAchieved()
+            ? const Icon(
+                Icons.close,
+              )
+            : const Icon(
+                Icons.done,
+              ),
+      ),
+      secondaryBackground: Container(
           color: ConstantsTheme.redColor,
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 10),
-          child: const Icon(Icons.delete)),
+          child: const Icon(
+            Icons.delete,
+          )),
       child: InkWell(
         child: Card(
           child: ListTile(
-            onTap: () => _viewGoal(context, goal),
-            title: Center(
-              child: Text(goal.getName()),
+            onTap: () => _viewGoal(context, item),
+            title: Text(item.getName()),
+            trailing: Icon(
+              item.getAchieved() ? Icons.check : Icons.close,
+              color: item.getAchieved()
+                  ? ConstantsTheme.greenColor
+                  : ConstantsTheme.redColor,
             ),
           ),
         ),
       ),
       confirmDismiss: (direction) {
-        return _confirmDismiss(direction, goal);
+        if (direction == DismissDirection.endToStart) {
+          return _confirmDismiss(direction, item);
+        }
+        return _confirmDone(direction, item);
       },
-      onDismissed: (direction) => _deleteItem(goal),
+      onDismissed: (direction) => _dismissItem(item),
     );
+  }
+
+  ///Called when viewing a goal has been ended
+  Future<bool> _confirmDone(DismissDirection direction, GoalClass goal) async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: !goal.getAchieved()
+                ? const Text(ConstantTexts.doneSure)
+                : const Text(ConstantTexts.undoSure),
+            content: const Text(ConstantTexts.rollback),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    goal.achieveGoal(!goal.getAchieved());
+                  });
+                  DataBaseHandler.updateDataBase(goal);
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text(ConstantTexts.yes),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text(ConstantTexts.no),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   Future<bool> _confirmDismiss(
@@ -156,11 +209,9 @@ class _GoalShowPageState extends State<GoalShowPage> {
     })).then((value) => setState(() {}));
   }
 
-  void _deleteItem(GoalClass goal) {
-    setState(() {
-      widget.goal.subgoals.remove(goal);
-      DataBaseHandler.deleteDataBase(goal);
-    });
+  void _dismissItem(GoalClass goal) {
+    widget.goal.subgoals.remove(goal);
+    DataBaseHandler.deleteDataBase(goal);
   }
 
   ///Called when adding of a new subgoal has been ended
